@@ -23,21 +23,21 @@ with open(hints, "r", encoding="utf-8") as rp:
 hints = json.loads(buf)
 if iterable(hints['UserFunctions']):
     for func in hints['UserFunctions']:
-        print("Renaming %s to %s" % (hex(func['Start']), func['FullName']))
+        print(f"Renaming {hex(func['Start'])} to {func['FullName']}")
         idaapi.add_func(func['Start'], func['End'])
         idaapi.set_name(func['Start'], func['FullName'], idaapi.SN_NOWARN | idaapi.SN_NOCHECK | ida_name.SN_FORCE)
 
 if iterable(hints['StdFunctions']):
     for func in hints['StdFunctions']:
-        print("Renaming %s to %s" % (hex(func['Start']), func['FullName']))
+        print(f"Renaming {hex(func['Start'])} to {func['FullName']}")
         idaapi.add_func(func['Start'], func['End'])
         idaapi.set_name(func['Start'], func['FullName'], idaapi.SN_NOWARN | idaapi.SN_NOCHECK | ida_name.SN_FORCE)
 
 if iterable(hints['Types']):
     for typ in hints['Types']:
-        print("Renaming %s to %s" % (hex(typ['VA']), typ['Str']))
+        print(f"Renaming {hex(typ['VA'])} to {typ['Str']}")
         idaapi.set_name(typ['VA'], typ['Str'], idaapi.SN_NOWARN | idaapi.SN_NOCHECK | ida_name.SN_FORCE)
-        
+
         # IDA often thinks these are string pointers, lets undefine that, then set the type correctly
         ida_bytes.del_items(typ['VA'], 0, 4)
         py_type = idaapi.idc_parse_decl(idaapi.cvar.idati, "void* ptr;", 1)
@@ -45,9 +45,9 @@ if iterable(hints['Types']):
 
 if iterable(hints['Interfaces']):
     for typ in hints['Interfaces']:
-        print("Renaming %s to %s" % (hex(typ['VA']), typ['Str']))
+        print(f"Renaming {hex(typ['VA'])} to {typ['Str']}")
         idaapi.set_name(typ['VA'], typ['Str'], idaapi.SN_NOWARN | idaapi.SN_NOCHECK | ida_name.SN_FORCE)
-        
+
         # IDA often thinks these are string pointers, lets undefine that, then set the type correctly
         ida_bytes.del_items(typ['VA'], 0, 4)
         py_type = idaapi.idc_parse_decl(idaapi.cvar.idati, "void* ptr;", 1)
